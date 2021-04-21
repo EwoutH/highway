@@ -13,7 +13,10 @@ cache:
 
 before_build: 
   - vcpkg install gtest:%arch%-windows
-  - cmake . -A %arch%
+  - del BUILD
+  - mkdir build
+  - cde build
+  - cmake .. -A %arch%
 
 build:
   project: hwy.sln
