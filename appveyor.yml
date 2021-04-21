@@ -6,7 +6,7 @@ environment:
   - arch: x64
   - arch: ARM64
 
-before_build: cmake . -A %arch% -DHWY_SYSTEM_GTEST=OFF
+before_build: cmake . -A %arch% -DHWY_SYSTEM_GTEST=ON
 
 build:
   project: hwy.sln
