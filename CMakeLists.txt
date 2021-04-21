@@ -19,7 +19,7 @@ if(POLICY CMP0083)
   cmake_policy(SET CMP0083 NEW)
 endif()
 
-project(hwy VERSION 0.1)
+project(hwy VERSION 0.12.0)  # Keep in sync with highway.h version
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -51,7 +51,14 @@ check_cxx_source_compiles(
   HWY_EMSCRIPTEN
 )
 
+set(HWY_CONTRIB_SOURCES
+    contrib/image/image.cc
+    contrib/image/image.h
+    contrib/math/math-inl.h
+)
+
 set(HWY_SOURCES
+    # TODO(janwas): remove after users are migrated to hwy_contrib
     contrib/image/image.cc
     contrib/image/image.h
     contrib/math/math-inl.h
@@ -153,6 +160,11 @@ target_compile_options(hwy PRIVATE ${HWY_FLAGS})
 set_property(TARGET hwy PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(hwy PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
+add_library(hwy_contrib STATIC ${HWY_CONTRIB_SOURCES})
+target_compile_options(hwy_contrib PRIVATE ${HWY_FLAGS})
+set_property(TARGET hwy_contrib PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_include_directories(hwy_contrib PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+
 # -------------------------------------------------------- install library
 install(TARGETS hwy
   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
@@ -166,9 +178,11 @@ foreach (source ${HWY_SOURCES})
   endif()
 endforeach()
 
-# Add a pkg-config file for libhwy and the test library.
+# TODO(janwas): install hwy_contrib after removing from HWY_SOURCES
+
+# Add a pkg-config file for libhwy and the contrib/test libraries.
 set(HWY_LIBRARY_VERSION "${CMAKE_PROJECT_VERSION}")
-foreach (pc libhwy.pc libhwy-test.pc)
+foreach (pc libhwy.pc libhwy-contrib.pc libhwy-test.pc)
   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${pc}.in" "${pc}" @ONLY)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${pc}"
       DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
