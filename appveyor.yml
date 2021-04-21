@@ -13,11 +13,8 @@ cache:
 
 before_build: 
   - vcpkg install gtest:%arch%-windows
-  - cmake . -A %arch% -DHWY_SYSTEM_GTEST=ON
 
-build:
-  project: hwy.sln
-  verbosity: minimal
+build: off
 
 artifacts:
 - path: /*/Release/*.exe
