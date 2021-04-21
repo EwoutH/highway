@@ -13,4 +13,4 @@ build:
   verbosity: minimal
 
 artifacts:
-- path: "*\Release\*.exe"
+- path: /*/Release/*.exe
