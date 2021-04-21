@@ -6,14 +6,11 @@ environment:
   - arch: x64
   - arch: ARM64
 
-before_build:
-  - mkdir build
-  - cd build
-  - cmake .. -A %arch%
+before_build: cmake . -A %arch%
 
 build:
-  project: build/hwy.sln
+  project: hwy.sln
   verbosity: minimal
 
 artifacts:
-- path: build\*\Release\*.exe
+- path: *\Release\*.exe
