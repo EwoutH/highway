@@ -2,11 +2,18 @@ image: Visual Studio 2019
 configuration: Release
 
 environment:
+  VCPKG: C:/Tools/vcpkg
   matrix:
   - arch: x64
   - arch: ARM64
 
-before_build: cmake . -A %arch% -DHWY_SYSTEM_GTEST=ON
+cache:
+- c:\tools\vcpkg\installed\
+- C:\Users\appveyor\AppData\Local\vcpkg\
+
+before_build: 
+  - vcpkg install gtest:%arch%-windows
+  - cmake . -A %arch% -DHWY_SYSTEM_GTEST=ON
 
 build:
   project: hwy.sln
